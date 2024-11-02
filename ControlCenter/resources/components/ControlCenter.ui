@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Control Center</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color:#2a2a2a</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QGroupBox" name="MonitorGroup_1">
     <property name="geometry">
@@ -396,6 +399,63 @@
     <property name="title">
      <string>Indicator</string>
     </property>
+    <widget class="QLabel" name="IndicatorDev_1">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>50</y>
+       <width>71</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap>../2e95a823/warning.png</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="IndicatorDev_2">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>170</y>
+       <width>71</width>
+       <height>81</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap>../933061b3/fire-extinguisher.png</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="IndicatorDev_3">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>320</y>
+       <width>71</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap>../5934cebb/sprinkler_off.png</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -410,6 +470,8 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources/>
+ <resources>
+  <include location="../3588fc1b/list.qrc"/>
+ </resources>
  <connections/>
 </ui>
