@@ -2,11 +2,16 @@ import sys
 import time
 import datetime
 import numpy as np
+import pyqtgraph as pg
+
+from pyqtgraph import AxisItem
+from pyqtgraph import LabelItem
 
 from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget
 from PyQt6.QtGui import QPixmap, QIcon
-from PyQt6.QtCore import QSize
+from PyQt6.QtCore import QSize, QTimer, QThread
 
+from resources.components.support_functions import UpdateSensor_ClassWorker
 from resources.components.Ui_ControlCenter import Ui_MainWindow
 from resources.announcements import demo
 
@@ -24,6 +29,7 @@ class ControlCenter(QMainWindow):
         self.Dev2_Ctl=0 # only 1 or 0
         self.Dev3_Ctl=0 # in range [0->100]
         self.Chart_Len=10
+        self.Chart_XAxis_Data=range(1, self.Chart_Len+1)
         self.Chart_Data_1=np.zeros(self.Chart_Len)
         self.Chart_Data_2=np.zeros(self.Chart_Len)
         self.Chart_Data_3=np.zeros(self.Chart_Len)
@@ -39,6 +45,10 @@ class ControlCenter(QMainWindow):
         size=self.ui.IndicatorDev_2.size()
         pixmap=QPixmap("./resources/images/switch-off.png")
         self.ui.Dev2_Switch_1.setPixmap(pixmap.scaled(size))
+        # Set-up chart
+        self.Load_Chart_1()
+        self.Load_Chart_2()
+        self.Load_Chart_3()
         # Connect signal
         self.ui.Dev1_Start_1.clicked.connect(self.Set_Dev1_state_ON)
         self.ui.Dev1_Stop_1.clicked.connect(self.Set_Dev1_state_OFF)
@@ -49,6 +59,21 @@ class ControlCenter(QMainWindow):
         self.ui.Run_3.clicked.connect(self.Run_Mode_3)
         self.ui.Clear_Notification_1.clicked.connect(self.Clear_Notification)
         self.ui.Exit_1.clicked.connect(self.Exit)
+        # ---------------------
+        # Tạo luồng mới
+        self.thread1 = QThread()
+        # Tạo đối tượng worker
+        self.UpdateSensor_ClassWorker = UpdateSensor_ClassWorker(self)
+        # Di chuyển đối tượng worker vào luồng đã tạo
+        self.UpdateSensor_ClassWorker.moveToThread(self.thread1)
+        # Kết nối hàm UpdateData của đối tượng worker đến luồng
+        self.thread1.started.connect(self.UpdateSensor_ClassWorker.UpdateData)
+        # Kết nối hàm sẽ thực thi khi có tín hiệu finished từ Worker
+        self.UpdateSensor_ClassWorker.finished.connect(self.thread1.quit) # Thoát luồng
+        self.UpdateSensor_ClassWorker.finished.connect(self.UpdateSensor_ClassWorker.deleteLater) # Xoá đối tượng
+        self.thread1.finished.connect(self.thread1.deleteLater) # Xoá luồng
+        # Bắt đầu chạy luồng
+        self.thread1.start()
         # Hello 
         self.New_Notification(demo.noti__01)
         self.New_Notification(demo.noti__02)
@@ -62,7 +87,30 @@ class ControlCenter(QMainWindow):
             pixmap=QPixmap("./resources/images/warning.png")
             self.ui.IndicatorDev_1.setPixmap(pixmap.scaled(size))
 
-    # def Load_Chart_1(self):
+    def Load_Chart_x(self, chart, YValues=None, YLabel=None, YUnit=None):
+        chart.setBackground('white')
+        layout = pg.GraphicsLayout()
+        chart.setCentralItem(layout)
+        chart.show()
+        plot = layout.addPlot(0, 0)
+        if YValues is not None:
+            plot.plot(self.Chart_XAxis_Data, YValues)
+        plot.showGrid(x = True, y = True, alpha = 0.5)
+        plot.setLabel('left', YLabel, YUnit)
+        X_axis = plot.getAxis('bottom')
+        X_axis.setStyle(showValues=False)
+        
+        
+
+    def Load_Chart_1(self):
+        self.Load_Chart_x(self.ui.Chart_1, YValues=self.Chart_Data_1, YLabel='Power Generation', YUnit='VAh')
+
+    def Load_Chart_2(self):
+        self.Load_Chart_x(self.ui.Chart_2,  YValues=self.Chart_Data_2, YLabel='Solar Panel (Max)' , YUnit=' oC')
+
+    def Load_Chart_3(self):
+        self.Load_Chart_x(self.ui.Chart_3,  YValues=self.Chart_Data_3, YLabel='Inverter (Max)' , YUnit=' oC')
+
     def New_Notification(self, str_text):
         YEAR        = datetime.date.today().year     # the current year
         MONTH       = datetime.date.today().month    # the current month
