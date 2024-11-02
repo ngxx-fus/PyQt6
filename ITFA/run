@@ -1,0 +1,44 @@
+#!/bin/sh
+# Add this file into your path for run quicker :>
+# > PATH=$PATH:$(pwd)
+ui_file_path=./resources/components/ControlCenter.ui
+uipy_file_path=./resources/components/Ui_ControlCenter.py
+py_file_path=./Ui_ControlCenter.py
+
+python_version=$(python --version | grep "Python 3.8")
+echo "Interpreter: $python_version"
+
+# check python_version is empty? Empty <-> Not found python 3.8
+if [ -z "$python_version" ]; then
+    echo "Python 3.8.x is required!"
+    echo "Aborting!"
+    exit 1
+fi
+
+if [ -f $ui_file_path ]; then
+    echo "Found $ui_file_path!"
+    echo "Convert: \e[93m$ui_file_path\e[0m ---> \e[93m$uipy_file_path\e[0m"
+    pyuic6 $ui_file_path -o $uipy_file_path
+    echo "Done!"
+    echo
+else
+    echo "Not found $ui_file_path!"
+    echo "Aborting..."
+    exit 1
+    echo
+fi
+
+if [ -f $py_file_path ]; then
+    echo "Found $py_file_path!"
+    echo "Convert: \e[93m$py_file_path\e[0m"
+    python $py_file_path
+    echo "Done!"
+    echo
+
+else
+    echo "Not found $ui_file_path!"
+    echo "Aborting..."
+    exit 1
+    echo
+
+fi
