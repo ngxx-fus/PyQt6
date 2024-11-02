@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Control Center</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../3f8329d0/LOGO - W.png</normaloff>../3f8329d0/LOGO - W.png</iconset>
+  </property>
   <property name="styleSheet">
    <string notr="true">background-color:#2a2a2a</string>
   </property>
@@ -29,6 +33,36 @@
     <property name="title">
      <string>System Monitor</string>
     </property>
+    <widget class="PlotWidget" name="Chart_1">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>461</width>
+       <height>191</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="PlotWidget" name="Chart_2">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>230</y>
+       <width>461</width>
+       <height>191</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="PlotWidget" name="Chart_3">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>430</y>
+       <width>461</width>
+       <height>191</height>
+      </rect>
+     </property>
+    </widget>
    </widget>
    <widget class="QGroupBox" name="PresetMode_1">
     <property name="geometry">
@@ -252,7 +286,7 @@
      <widget class="QLabel" name="Dev2_Switch_1">
       <property name="geometry">
        <rect>
-        <x>30</x>
+        <x>20</x>
         <y>30</y>
         <width>71</width>
         <height>31</height>
@@ -308,6 +342,16 @@
     <property name="title">
      <string>Notification</string>
     </property>
+    <widget class="QTextBrowser" name="Notification">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>631</width>
+       <height>171</height>
+      </rect>
+     </property>
+    </widget>
    </widget>
    <widget class="QGroupBox" name="SystemControl_1">
     <property name="geometry">
@@ -457,19 +501,66 @@
      </property>
     </widget>
    </widget>
-  </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>1170</width>
-     <height>23</height>
-    </rect>
-   </property>
+   <widget class="QLabel" name="Copyright_1">
+    <property name="geometry">
+     <rect>
+      <x>980</x>
+      <y>660</y>
+      <width>171</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>(Student's ID: 22119211)</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="Copyright_2">
+    <property name="geometry">
+     <rect>
+      <x>810</x>
+      <y>660</y>
+      <width>21</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>15</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>©</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="Copyright_3">
+    <property name="geometry">
+     <rect>
+      <x>830</x>
+      <y>650</y>
+      <width>141</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>../fb55c6d9/logo-boot.png</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PlotWidget</class>
+   <extends>QGraphicsView</extends>
+   <header>pyqtgraph.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../3588fc1b/list.qrc"/>
  </resources>
