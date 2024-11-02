@@ -1,5 +1,6 @@
 import sys
 import time
+import datetime
 import numpy as np
 
 from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget
@@ -7,7 +8,7 @@ from PyQt6.QtGui import QPixmap, QIcon
 from PyQt6.QtCore import QSize
 
 from resources.components.Ui_ControlCenter import Ui_MainWindow
-from resources.announcements import announcements
+from resources.announcements import demo
 
 class ControlCenter(QMainWindow):
     def __init__(self, parent=None):
@@ -15,6 +16,10 @@ class ControlCenter(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         # Global variables
+        self.Preset_Mode_1={"Dev1":"ON", "Dev2":"OFF", "Dev3":"HALF"}
+        self.Preset_Mode_2={"Dev1":"ON", "Dev2":"ON", "Dev3":"FULL"}
+        self.Preset_Mode_3={"Dev1":"OFF", "Dev2":"OFF", "Dev3":"OFF"}
+        self.Notification_Buffer=""
         self.Dev1_Ctl=0 # only 1 or 0
         self.Dev2_Ctl=0 # only 1 or 0
         self.Dev3_Ctl=0 # in range [0->100]
@@ -39,6 +44,14 @@ class ControlCenter(QMainWindow):
         self.ui.Dev1_Stop_1.clicked.connect(self.Set_Dev1_state_OFF)
         self.ui.Dev2_Switch_1.mousePressEvent = self.Toggle_Dev2
         self.ui.Dev3_Slider_1.valueChanged.connect(self.Update_Dev3)
+        self.ui.Run_1.clicked.connect(self.Run_Mode_1)
+        self.ui.Run_2.clicked.connect(self.Run_Mode_2)
+        self.ui.Run_3.clicked.connect(self.Run_Mode_3)
+        self.ui.Clear_Notification_1.clicked.connect(self.Clear_Notification)
+        self.ui.Exit_1.clicked.connect(self.Exit)
+        # Hello 
+        self.New_Notification(demo.noti__01)
+        self.New_Notification(demo.noti__02)
 
     def Set_Indicator_Dev_1(self):
         size=self.ui.IndicatorDev_1.size()
@@ -48,6 +61,19 @@ class ControlCenter(QMainWindow):
         else:
             pixmap=QPixmap("./resources/images/warning.png")
             self.ui.IndicatorDev_1.setPixmap(pixmap.scaled(size))
+
+    # def Load_Chart_1(self):
+    def New_Notification(self, str_text):
+        YEAR        = datetime.date.today().year     # the current year
+        MONTH       = datetime.date.today().month    # the current month
+        DATE        = datetime.date.today().day      # the current day
+        HOUR        = datetime.datetime.now().hour   # the current hour
+        MINUTE      = datetime.datetime.now().minute # the current minute
+        SECONDS     = datetime.datetime.now().second #the current second
+        Old_Notification=self.Notification_Buffer
+        Time=f"[ {HOUR}:{MINUTE}:{SECONDS}   {YEAR}-{MONTH}-{DATE} ]\n"
+        self.Notification_Buffer = "\n" + Time + str_text + "\n" + Old_Notification
+        self.ui.Notification.setPlainText(self.Notification_Buffer)
 
     def Set_Indicator_Dev_2(self):
         size=self.ui.IndicatorDev_2.size()
@@ -84,21 +110,65 @@ class ControlCenter(QMainWindow):
             size=self.ui.IndicatorDev_2.size()
             pixmap=QPixmap("./resources/images/switch-on.png")
             self.ui.Dev2_Switch_1.setPixmap(pixmap.scaled(size))
+            self.Set_Indicator_Dev_2()
         else:
             self.Dev2_Ctl = 0
             size=self.ui.IndicatorDev_2.size()
             pixmap=QPixmap("./resources/images/switch-off.png")
             self.ui.Dev2_Switch_1.setPixmap(pixmap.scaled(size))
-        self.Set_Indicator_Dev_2()
+            self.Set_Indicator_Dev_2()
 
-    def Update_Dev3(self, param):
+    def Update_Dev3(self):
         self.Dev3_Ctl = self.ui.Dev3_Slider_1.value()
-        self.Set_Indicator_Dev_3()            
+        self.Set_Indicator_Dev_3()
 
     def Set_Copyright(self):
         size=self.ui.Copyright_3.size()
         pixmap=QPixmap("./resources/images/logo-boot.png")
         self.ui.Copyright_3.setPixmap(pixmap)
+
+    def Run_Mode_x(self, preset_mode):
+        
+        if preset_mode["Dev1"] == "ON":
+            self.Set_Dev1_state_ON();
+        elif preset_mode["Dev1"] == "OFF":
+            self.Set_Dev1_state_OFF();
+        
+        if preset_mode["Dev2"] == "ON":
+            if self.Dev2_Ctl == 0:
+                self.Toggle_Dev2("param")
+        elif preset_mode["Dev2"] == "OFF":
+            if self.Dev2_Ctl == 1:
+                self.Toggle_Dev2("param")
+        
+        if preset_mode["Dev3"] == "OFF":
+            self.ui.Dev3_Slider_1.setValue(15)
+            self.Update_Dev3()
+        elif preset_mode["Dev3"] == "HALF":
+            self.ui.Dev3_Slider_1.setValue(45)
+            self.Update_Dev3()
+        elif preset_mode["Dev3"] == "FULL":
+            self.ui.Dev3_Slider_1.setValue(75)
+            self.Update_Dev3()
+
+    def Run_Mode_1(self):
+        self.New_Notification("Run PRESET MODE-1")
+        self.Run_Mode_x(self.Preset_Mode_1)
+
+    def Run_Mode_2(self):
+        self.New_Notification("Run PRESET MODE-2")
+        self.Run_Mode_x(self.Preset_Mode_2)
+
+    def Run_Mode_3(self):
+        self.New_Notification("Run PRESET MODE-3")
+        self.Run_Mode_x(self.Preset_Mode_3)
+
+    def Clear_Notification(self):
+        self.Notification_Buffer = ""
+        self.ui.Notification.setPlainText("")
+
+    def Exit(self):
+        sys.exit(1)
 
     # def Set_Dev_state_2(self):
     # def Set_Dev_state_3(self):
