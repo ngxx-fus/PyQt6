@@ -21,31 +21,41 @@ Demo-Ui
 
 ## Directory-Tree
 
-    ├── ControlCenter.py
-    ├── readme.md
-    ├── resources
-    │   ├── announcements
-    │   │   └── demo.py
-    │   ├── components
-    │   │   ├── ControlCenter.ui
-    │   │   ├── support_functions.py
-    │   │   └── Ui_ControlCenter.py
-    │   └── images
-    │       ├── black-toggle-buttons-21539.png
-    │       ├── cyber-security.png
-    │       ├── fire-extinguisher_action.png
-    │       ├── fire-extinguisher.png
-    │       ├── logo-boot.png
-    │       ├── LOGO - W.png
-    │       ├── shield.png
-    │       ├── sprinkler_full_on.png
-    │       ├── sprinkler_half_on.png
-    │       ├── sprinkler_off.png
-    │       ├── switch-off.png
-    │       ├── switch-on.png
-    │       ├── toggle-switch-on-off-buttons-21542.png
-    │       └── warning.png
-    └── run
+PyQT6 (Reposistory)
+├── ControlCenter (Current Project)
+│   ├── ControlCenter.py
+│   ├── readme.md
+│   ├── resources
+│   │   ├── announcements
+│   │   │   ├── demo.py
+│   │   │   └── __pycache__
+│   │   │       └── demo.cpython-38.pyc
+│   │   ├── components
+│   │   │   ├── ControlCenter.ui
+│   │   │   ├── __pycache__
+│   │   │   │   ├── support_functions.cpython-38.pyc
+│   │   │   │   └── Ui_ControlCenter.cpython-38.pyc
+│   │   │   ├── support_functions.py
+│   │   │   └── Ui_ControlCenter.py
+│   │   ├── demo.png
+│   │   └── images
+│   │       ├── black-toggle-buttons-21539.png
+│   │       ├── cyber-security.png
+│   │       ├── fire-extinguisher_action.png
+│   │       ├── fire-extinguisher.png
+│   │       ├── logo-boot.png
+│   │       ├── LOGO - W.png
+│   │       ├── shield.png
+│   │       ├── sprinkler_full_on.png
+│   │       ├── sprinkler_half_on.png
+│   │       ├── sprinkler_off.png
+│   │       ├── switch-off.png
+│   │       ├── switch-on.png
+│   │       ├── toggle-switch-on-off-buttons-21542.png
+│   │       └── warning.png
+│   └── run
+├── GettingStarted (Test Project)
+└── README.md
 
 ## Dependencies and Environment
 
