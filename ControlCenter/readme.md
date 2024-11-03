@@ -20,7 +20,7 @@ Demo-Ui
 ![alt text](https://github.com/ngxx-fus/PyQt6/blob/main/ControlCenter/resources/demo.png?raw=true)
 
 ## Directory-Tree
-
+```
 PyQT6 (Reposistory)
 ├── ControlCenter (Current Project)
 │   ├── ControlCenter.py
@@ -56,7 +56,7 @@ PyQT6 (Reposistory)
 │   └── run
 ├── GettingStarted (Test Project)
 └── README.md
-
+```
 ## Dependencies and Environment
 
 ### Python-Environment
