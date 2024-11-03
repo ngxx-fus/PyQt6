@@ -22,6 +22,7 @@ class ControlCenter(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         # Global variables
+        self.Notification_Buffer_Size=10000 #Chars
         self.Chart_Update="PAUSE"
         self.Preset_Mode_1={"Dev1":"ON", "Dev2":"OFF", "Dev3":"HALF"}
         self.Preset_Mode_2={"Dev1":"ON", "Dev2":"ON", "Dev3":"FULL"}
@@ -116,10 +117,13 @@ class ControlCenter(QMainWindow):
         self.thread2.start()
         # Connect update_chart_1 signal to self.Load_Chart_1 
         self.UpdateSensor_ClassWorker.update_chart_1.connect(self.Load_Chart_1)
-        # Connect update_chart_1 signal to self.Load_Chart_1 
+        # Connect update_chart_2 signal to self.Load_Chart_2 
         self.UpdateSensor_ClassWorker.update_chart_2.connect(self.Load_Chart_2)
-        # Connect update_chart_1 signal to self.Load_Chart_1 
+        # Connect update_chart_3 signal to self.Load_Chart_3 
         self.UpdateSensor_ClassWorker.update_chart_3.connect(self.Load_Chart_3)
+        # Connect warning signel to warning method
+        self.UpdateSensor_ClassWorker.overheat_warning_chart_2.connect(self.Set_overheat_warning_chart_2)
+        self.UpdateSensor_ClassWorker.overheat_warning_chart_3.connect(self.Set_overheat_warning_chart_3)
 
     def Load_Chart_1(self):
         self.Load_Chart_x(self.ui.Chart_1, YValues=self.Chart_Data_1, YLabel='Power Generation', YUnit='VAh', Color=(203, 96, 64, 70))
@@ -140,6 +144,8 @@ class ControlCenter(QMainWindow):
         Old_Notification=self.Notification_Buffer
         Time=f"[ {HOUR}:{MINUTE}:{SECONDS}   {YEAR}-{MONTH}-{DATE} ]\n"
         self.Notification_Buffer = "\n" + Time + str_text + "\n" + Old_Notification
+        if len(self.Notification_Buffer) > self.Notification_Buffer_Size:
+            self.Notification_Buffer = self.Notification_Buffer[:self.Notification_Buffer_Size]
         self.ui.Notification.setPlainText(self.Notification_Buffer)
 
     def Set_Indicator_Dev_1(self):
@@ -254,10 +260,14 @@ class ControlCenter(QMainWindow):
     def Exit(self):
         sys.exit(1)
 
+    def Set_overheat_warning_chart_2(self):
+        self.New_Notification(f"A panel is over-heat (at {self.Chart_Data_2[-1]}°C), please turn on Cooling System and walk around to fix it!")
+
+    def Set_overheat_warning_chart_3(self):
+        self.New_Notification(f"An inverter is over-heat (at {self.Chart_Data_3[-1]}°C), please turn on Cooling System and walk around to fix it!")
+
     def Reserve_Features(self):
         self.New_Notification("Reserve feature!")
-    # def Set_Dev_state_2(self):
-    # def Set_Dev_state_3(self):
 
 
 if __name__ == "__main__":
