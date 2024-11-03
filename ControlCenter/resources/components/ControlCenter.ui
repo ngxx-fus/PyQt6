@@ -378,7 +378,7 @@
       <string>Save Setting</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="Clear_Chart_1">
+    <widget class="QPushButton" name="Start_Chart_1">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -388,14 +388,14 @@
       </rect>
      </property>
      <property name="text">
-      <string>Clear Chart</string>
+      <string>Start Chart</string>
      </property>
     </widget>
     <widget class="QPushButton" name="Clear_Notification_1">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>60</y>
+       <y>90</y>
        <width>131</width>
        <height>26</height>
       </rect>
@@ -428,6 +428,19 @@
      </property>
      <property name="text">
       <string>Exit</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="Clear_Chart_2">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>60</y>
+       <width>131</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Clear Chart</string>
      </property>
     </widget>
    </widget>
@@ -561,8 +574,6 @@
    <header>pyqtgraph.h</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="../3588fc1b/list.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

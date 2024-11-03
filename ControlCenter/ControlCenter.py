@@ -3,15 +3,16 @@ import time
 import datetime
 import numpy as np
 import pyqtgraph as pg
+from random import randint
 
 from pyqtgraph import AxisItem
 from pyqtgraph import LabelItem
 
 from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget
 from PyQt6.QtGui import QPixmap, QIcon
-from PyQt6.QtCore import QSize, QTimer, QThread
+from PyQt6.QtCore import QSize, QTimer, QThread, QObject, pyqtSignal
 
-from resources.components.support_functions import UpdateSensor_ClassWorker
+# from resources.components.support_functions import UpdateSensor_ClassWorker
 from resources.components.Ui_ControlCenter import Ui_MainWindow
 from resources.announcements import demo
 
@@ -59,21 +60,9 @@ class ControlCenter(QMainWindow):
         self.ui.Run_3.clicked.connect(self.Run_Mode_3)
         self.ui.Clear_Notification_1.clicked.connect(self.Clear_Notification)
         self.ui.Exit_1.clicked.connect(self.Exit)
-        # ---------------------
-        # Tạo luồng mới
-        self.thread1 = QThread()
-        # Tạo đối tượng worker
-        self.UpdateSensor_ClassWorker = UpdateSensor_ClassWorker(self)
-        # Di chuyển đối tượng worker vào luồng đã tạo
-        self.UpdateSensor_ClassWorker.moveToThread(self.thread1)
-        # Kết nối hàm UpdateData của đối tượng worker đến luồng
-        self.thread1.started.connect(self.UpdateSensor_ClassWorker.UpdateData)
-        # Kết nối hàm sẽ thực thi khi có tín hiệu finished từ Worker
-        self.UpdateSensor_ClassWorker.finished.connect(self.thread1.quit) # Thoát luồng
-        self.UpdateSensor_ClassWorker.finished.connect(self.UpdateSensor_ClassWorker.deleteLater) # Xoá đối tượng
-        self.thread1.finished.connect(self.thread1.deleteLater) # Xoá luồng
-        # Bắt đầu chạy luồng
-        self.thread1.start()
+        self.ui.Start_Chart_1.clicked.connect(self.Start_Chart)
+        #Update chart
+        # self.Start_Chart()
         # Hello 
         self.New_Notification(demo.noti__01)
         self.New_Notification(demo.noti__02)
@@ -100,7 +89,17 @@ class ControlCenter(QMainWindow):
         X_axis = plot.getAxis('bottom')
         X_axis.setStyle(showValues=False)
         
-        
+    def Start_Chart(self):
+        self.thread1 = QThread()
+        self.UpdateSensor_ClassWorker = UpdateSensor_ClassWorker()
+        self.UpdateSensor_ClassWorker.moveToThread(self.thread1)
+        self.UpdateSensor_ClassWorker.finished.connect(self.thread1.quit) # Thoát luồng
+        self.UpdateSensor_ClassWorker.finished.connect(self.UpdateSensor_ClassWorker.deleteLater) # Xoá đối tượng
+        self.thread1.finished.connect(self.thread1.deleteLater) # Xoá luồng
+        print("Exit Start_Chart")
+        self.thread1.started.connect(self.UpdateSensor_ClassWorker.UpdateData(self))
+        self.thread1.start()
+        print("Exit Start_Chart?")
 
     def Load_Chart_1(self):
         self.Load_Chart_x(self.ui.Chart_1, YValues=self.Chart_Data_1, YLabel='Power Generation', YUnit='VAh')
