@@ -17,7 +17,7 @@ In addition, this app also provide control of 03 devices:
 
 Demo-Ui
 
-![alt text](./resources/demo.png)
+![alt text](https://github.com/ngxx-fus/PyQt6/blob/main/ControlCenter/resources/demo.png?raw=true)
 
 ## Directory-Tree
 
