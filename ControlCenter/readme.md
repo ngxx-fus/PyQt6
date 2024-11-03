@@ -12,10 +12,12 @@ Provide monitoring of:
 In addition, this app also provide control of 03 devices:
 
     + Device 01: Currently assigned to control Security System
-    + Device 01: Currently assigned to control Fire Fighting System
-    + Device 01: Currently assigned to control Solar Panel Cooling System
+    + Device 02: Currently assigned to control Fire Fighting System
+    + Device 03: Currently assigned to control Solar Panel Cooling System
 
+Demo-Ui
 
+![alt text](./resources/demo.png)
 
 ## Directory-Tree
 
@@ -101,8 +103,8 @@ For easier when editing of this source, you need Qt Designer (standalone), pyuic
 | 9  | [Drawing and Displaying objects and labels over the Axis in pyqtgraph - How to do it effectively?](https://stackoverflow.com/questions/52410731/drawing-and-displaying-objects-and-labels-over-the-axis-in-pyqtgraph-how-to-do)  |
 | 10  | [Install Qt Designer Standalone](https://www.pythonguis.com/installation/install-qt-designer-standalone/)  |
 | 11 | [Plotting With PyQtGraph](https://www.pythonguis.com/tutorials/plotting-pyqtgraph/)  |
-<!-- | 12  | []()  |
-| 13  | []()  |
+| 12  | [pyqtgraph](https://github.com/pyqtgraph/pyqtgraph)  |
+<!-- | 13  | []()  |
 | 14  | []()  |
 | 15  | []()  |
 | 16  | []()  |

@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Control Center</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../3f8329d0/LOGO - W.png</normaloff>../3f8329d0/LOGO - W.png</iconset>
+  </property>
   <widget class="QGroupBox" name="PresetMode_3">
    <property name="geometry">
     <rect>

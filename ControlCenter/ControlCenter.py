@@ -30,7 +30,7 @@ class ControlCenter(QMainWindow):
         self.Dev1_Ctl=0 # only 1 or 0
         self.Dev2_Ctl=0 # only 1 or 0
         self.Dev3_Ctl=0 # in range [0->100]
-        self.Chart_Len=10
+        self.Chart_Len=20
         self.Chart_XAxis_Data=range(1, self.Chart_Len+1)
         self.Chart_Data_1=np.zeros(self.Chart_Len)
         self.Chart_Data_2=np.zeros(self.Chart_Len)
@@ -43,6 +43,7 @@ class ControlCenter(QMainWindow):
         self.Set_Indicator_Dev_3()
         # Set-up copyright
         self.Set_Copyright()
+        self.setWindowIcon(QIcon("./resources/images/LOGO - W.png"))
         # Set-up dev2 switch
         size=self.ui.IndicatorDev_2.size()
         pixmap=QPixmap("./resources/images/switch-off.png")
@@ -62,6 +63,14 @@ class ControlCenter(QMainWindow):
         self.ui.Clear_Notification_1.clicked.connect(self.Clear_Notification)
         self.ui.Exit_1.clicked.connect(self.Exit)
         self.ui.Clear_Chart_2.clicked.connect(self.Clear_Chart)
+        self.ui.Clear_1.clicked.connect(self.Reserve_Features)
+        self.ui.Clear_2.clicked.connect(self.Reserve_Features)
+        self.ui.Clear_3.clicked.connect(self.Reserve_Features)
+        self.ui.Load_1.clicked.connect(self.Reserve_Features)
+        self.ui.Load_2.clicked.connect(self.Reserve_Features)
+        self.ui.Load_3.clicked.connect(self.Reserve_Features)
+        self.ui.Save_Setting_1.clicked.connect(self.Reserve_Features)
+        self.ui.Load_Setting_1.clicked.connect(self.Reserve_Features)
         #Update chart
         self.Start_Chart()
         # Hello 
@@ -69,15 +78,17 @@ class ControlCenter(QMainWindow):
         self.New_Notification(demo.noti__02)
 
     def Load_Chart_x(self, chart, YValues=None, YLabel=None, YUnit=None, Color=None):
-        chart.setBackground('white')
+        chart.setBackground('w')
         layout = pg.GraphicsLayout()
         chart.setCentralItem(layout)
         chart.show()
         plot = layout.addPlot(0, 0)
         if YValues is not None:
             if Color is not None:
-                print(">")
-                plot.plot(self.Chart_XAxis_Data, YValues, color=Color)
+                pen = pg.mkPen(color=Color)
+                plot.plot(self.Chart_XAxis_Data, YValues, pen=pen, 
+                            symbol="s", symbolSize=5, symbolBrush='k',
+                            fillLevel=-0.3, brush=Color)
             else:
                 plot.plot(self.Chart_XAxis_Data, YValues)
         plot.showGrid(x = True, y = True, alpha = 0.5)
@@ -111,13 +122,13 @@ class ControlCenter(QMainWindow):
         self.UpdateSensor_ClassWorker.update_chart_3.connect(self.Load_Chart_3)
 
     def Load_Chart_1(self):
-        self.Load_Chart_x(self.ui.Chart_1, YValues=self.Chart_Data_1, YLabel='Power Generation', YUnit='VAh', Color='r')
+        self.Load_Chart_x(self.ui.Chart_1, YValues=self.Chart_Data_1, YLabel='Power Generation', YUnit='VAh', Color=(203, 96, 64, 70))
 
     def Load_Chart_2(self):
-        self.Load_Chart_x(self.ui.Chart_2,  YValues=self.Chart_Data_2, YLabel='Solar Panel (Max)' , YUnit=' °C')
+        self.Load_Chart_x(self.ui.Chart_2,  YValues=self.Chart_Data_2, YLabel='Solar Panel (Max)' , YUnit=' °C', Color=(19, 93, 102, 70))
 
     def Load_Chart_3(self):
-        self.Load_Chart_x(self.ui.Chart_3,  YValues=self.Chart_Data_3, YLabel='Inverter (Max)' , YUnit=' °C')
+        self.Load_Chart_x(self.ui.Chart_3,  YValues=self.Chart_Data_3, YLabel='Inverter (Max)' , YUnit=' °C', Color=(22, 66, 60, 70))
 
     def New_Notification(self, str_text):
         YEAR        = datetime.date.today().year     # the current year
@@ -243,6 +254,8 @@ class ControlCenter(QMainWindow):
     def Exit(self):
         sys.exit(1)
 
+    def Reserve_Features(self):
+        self.New_Notification("Reserve feature!")
     # def Set_Dev_state_2(self):
     # def Set_Dev_state_3(self):
 

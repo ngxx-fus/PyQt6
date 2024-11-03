@@ -40,5 +40,5 @@ class UpdateSensor_ClassWorker(QObject):
             self.Update_Sensor_1()
             self.Update_Sensor_2()
             self.Update_Sensor_3()
-            time.sleep(2)
+            time.sleep(5)
         self.finished.emit()

@@ -13,6 +13,9 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1207, 765)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("./resources/components/../3f8329d0/LOGO - W.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        MainWindow.setWindowIcon(icon)
         self.PresetMode_3 = QtWidgets.QGroupBox(parent=MainWindow)
         self.PresetMode_3.setGeometry(QtCore.QRect(510, 290, 141, 131))
         self.PresetMode_3.setObjectName("PresetMode_3")
