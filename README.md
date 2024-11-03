@@ -93,9 +93,9 @@ Note that "venv" just a name, it can be edited to whatever you want!
 ### Dependencies
 For easier when editing of this source, you need Qt Designer (standalone), pyuic6, PyQt6. Install them via the commands below:
 
+    pip install designer
     pip install PyQt6==6.4.2
     pip install PyQt6-Qt6==6.4.2
-    pip install pyqt6-tools designer
     pip install pyqt6-tools==6.4.2.3.3
     pip install dvg-pyqtgraph-threadsafe
 
