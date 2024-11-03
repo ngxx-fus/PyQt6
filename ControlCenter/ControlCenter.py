@@ -22,7 +22,8 @@ class ControlCenter(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         # Global variables
-        self.Notification_Buffer_Size=10000 #Chars
+        self.Pause_Chart=0
+        self.Notification_Buffer_Size=100000 #Chars
         self.Chart_Update="PAUSE"
         self.Preset_Mode_1={"Dev1":"ON", "Dev2":"OFF", "Dev3":"HALF"}
         self.Preset_Mode_2={"Dev1":"ON", "Dev2":"ON", "Dev3":"FULL"}
@@ -31,7 +32,7 @@ class ControlCenter(QMainWindow):
         self.Dev1_Ctl=0 # only 1 or 0
         self.Dev2_Ctl=0 # only 1 or 0
         self.Dev3_Ctl=0 # in range [0->100]
-        self.Chart_Len=20
+        self.Chart_Len=50
         self.Chart_XAxis_Data=range(1, self.Chart_Len+1)
         self.Chart_Data_1=np.zeros(self.Chart_Len)
         self.Chart_Data_2=np.zeros(self.Chart_Len)
@@ -72,6 +73,7 @@ class ControlCenter(QMainWindow):
         self.ui.Load_3.clicked.connect(self.Reserve_Features)
         self.ui.Save_Setting_1.clicked.connect(self.Reserve_Features)
         self.ui.Load_Setting_1.clicked.connect(self.Reserve_Features)
+        self.ui.Pause_Chart_1.clicked.connect(self.Toggle_Pause_Chart_State)
         #Update chart
         self.Start_Chart()
         # Hello 
@@ -88,7 +90,7 @@ class ControlCenter(QMainWindow):
             if Color is not None:
                 pen = pg.mkPen(color=Color)
                 plot.plot(self.Chart_XAxis_Data, YValues, pen=pen, 
-                            symbol="s", symbolSize=5, symbolBrush='k',
+                            symbol="s", symbolSize=2, symbolBrush=(56, 75, 112),
                             fillLevel=-0.3, brush=Color)
             else:
                 plot.plot(self.Chart_XAxis_Data, YValues)
@@ -265,6 +267,17 @@ class ControlCenter(QMainWindow):
 
     def Set_overheat_warning_chart_3(self):
         self.New_Notification(f"An inverter is over-heat (at {self.Chart_Data_3[-1]}°C), please turn on Cooling System and walk around to fix it!")
+
+    def Toggle_Pause_Chart_State(self):
+        if self.Pause_Chart == 1:
+            self.New_Notification("Continue Updating All Charts!")
+            self.Pause_Chart = 0
+            self.Load_Chart_1()
+            self.Load_Chart_2()
+            self.Load_Chart_3()
+        else:
+            self.New_Notification("Pause Updating All Charts!")
+            self.Pause_Chart = 1
 
     def Reserve_Features(self):
         self.New_Notification("Reserve feature!")

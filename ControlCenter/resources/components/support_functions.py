@@ -22,19 +22,22 @@ class UpdateSensor_ClassWorker(QObject):
         data = np.append(self.myapp.Chart_Data_1[1:], randint(30, 82)*1000)
         self.myapp.Chart_Data_1 = data
         #------------------------------------#
-        self.update_chart_1.emit()
+        if self.myapp.Pause_Chart == 0:
+            self.update_chart_1.emit()
 
     def Update_Sensor_2(self):
         data = randint(68, 100)
         self.myapp.Chart_Data_2 = np.append(self.myapp.Chart_Data_2[1:], data)
         #------------------------------------#
-        self.update_chart_2.emit()
+        if self.myapp.Pause_Chart == 0:
+            self.update_chart_2.emit()
 
     def Update_Sensor_3(self):
         data = randint(68, 100)
         self.myapp.Chart_Data_3 = np.append(self.myapp.Chart_Data_3[1:], data)
         #------------------------------------#
-        self.update_chart_3.emit()
+        if self.myapp.Pause_Chart == 0:
+            self.update_chart_3.emit()
 
 
     def UpdateData(self):
@@ -42,9 +45,10 @@ class UpdateSensor_ClassWorker(QObject):
             self.Update_Sensor_1()
             self.Update_Sensor_2()
             self.Update_Sensor_3()
-            if self.myapp.Chart_Data_2[-1] > 85:
-                self.overheat_warning_chart_2.emit()
-            if self.myapp.Chart_Data_3[-1] > 85:
-                self.overheat_warning_chart_3.emit()
+            if self.myapp.Pause_Chart == 0:
+                if self.myapp.Chart_Data_2[-1] > 85:
+                    self.overheat_warning_chart_2.emit()
+                if self.myapp.Chart_Data_3[-1] > 85:
+                    self.overheat_warning_chart_3.emit()
             time.sleep(5)
         self.finished.emit()

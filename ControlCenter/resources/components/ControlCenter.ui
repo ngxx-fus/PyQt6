@@ -72,9 +72,9 @@
   <widget class="QGroupBox" name="Notification_1">
    <property name="geometry">
     <rect>
-     <x>500</x>
+     <x>510</x>
      <y>430</y>
-     <width>651</width>
+     <width>641</width>
      <height>211</height>
     </rect>
    </property>
@@ -86,7 +86,7 @@
      <rect>
       <x>10</x>
       <y>30</y>
-      <width>631</width>
+      <width>621</width>
       <height>171</height>
      </rect>
     </property>
@@ -313,9 +313,9 @@
   <widget class="QGroupBox" name="Indicator_1">
    <property name="geometry">
     <rect>
-     <x>970</x>
+     <x>980</x>
      <y>10</y>
-     <width>181</width>
+     <width>171</width>
      <height>411</height>
     </rect>
    </property>
@@ -405,19 +405,6 @@
      <string>Save Setting</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="Clear_Notification_1">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>60</y>
-      <width>131</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Clear Notification</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="Load_Setting_1">
     <property name="geometry">
      <rect>
@@ -455,6 +442,32 @@
     </property>
     <property name="text">
      <string>Clear Chart</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Pause_Chart_1">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>60</y>
+      <width>131</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Pause/Cont Chart</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Clear_Notification_1">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>90</y>
+      <width>131</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Clear Notification</string>
     </property>
    </widget>
   </widget>
