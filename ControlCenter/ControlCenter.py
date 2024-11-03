@@ -12,16 +12,17 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget
 from PyQt6.QtGui import QPixmap, QIcon
 from PyQt6.QtCore import QSize, QTimer, QThread, QObject, pyqtSignal
 
-# from resources.components.support_functions import UpdateSensor_ClassWorker
+from resources.components.support_functions import UpdateSensor_ClassWorker
 from resources.components.Ui_ControlCenter import Ui_MainWindow
 from resources.announcements import demo
 
 class ControlCenter(QMainWindow):
     def __init__(self, parent=None):
-        super().__init__(parent);
+        super().__init__(parent)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         # Global variables
+        self.Chart_Update="PAUSE"
         self.Preset_Mode_1={"Dev1":"ON", "Dev2":"OFF", "Dev3":"HALF"}
         self.Preset_Mode_2={"Dev1":"ON", "Dev2":"ON", "Dev3":"FULL"}
         self.Preset_Mode_3={"Dev1":"OFF", "Dev2":"OFF", "Dev3":"OFF"}
@@ -60,55 +61,63 @@ class ControlCenter(QMainWindow):
         self.ui.Run_3.clicked.connect(self.Run_Mode_3)
         self.ui.Clear_Notification_1.clicked.connect(self.Clear_Notification)
         self.ui.Exit_1.clicked.connect(self.Exit)
-        self.ui.Start_Chart_1.clicked.connect(self.Start_Chart)
+        self.ui.Clear_Chart_2.clicked.connect(self.Clear_Chart)
         #Update chart
-        # self.Start_Chart()
+        self.Start_Chart()
         # Hello 
         self.New_Notification(demo.noti__01)
         self.New_Notification(demo.noti__02)
 
-    def Set_Indicator_Dev_1(self):
-        size=self.ui.IndicatorDev_1.size()
-        if self.Dev1_Ctl == 1:
-            pixmap=QPixmap("./resources/images/shield.png")
-            self.ui.IndicatorDev_1.setPixmap(pixmap.scaled(size))
-        else:
-            pixmap=QPixmap("./resources/images/warning.png")
-            self.ui.IndicatorDev_1.setPixmap(pixmap.scaled(size))
-
-    def Load_Chart_x(self, chart, YValues=None, YLabel=None, YUnit=None):
+    def Load_Chart_x(self, chart, YValues=None, YLabel=None, YUnit=None, Color=None):
         chart.setBackground('white')
         layout = pg.GraphicsLayout()
         chart.setCentralItem(layout)
         chart.show()
         plot = layout.addPlot(0, 0)
         if YValues is not None:
-            plot.plot(self.Chart_XAxis_Data, YValues)
+            if Color is not None:
+                print(">")
+                plot.plot(self.Chart_XAxis_Data, YValues, color=Color)
+            else:
+                plot.plot(self.Chart_XAxis_Data, YValues)
         plot.showGrid(x = True, y = True, alpha = 0.5)
         plot.setLabel('left', YLabel, YUnit)
+        plot.legend 
         X_axis = plot.getAxis('bottom')
         X_axis.setStyle(showValues=False)
         
     def Start_Chart(self):
-        self.thread1 = QThread()
-        self.UpdateSensor_ClassWorker = UpdateSensor_ClassWorker()
-        self.UpdateSensor_ClassWorker.moveToThread(self.thread1)
-        self.UpdateSensor_ClassWorker.finished.connect(self.thread1.quit) # Thoát luồng
-        self.UpdateSensor_ClassWorker.finished.connect(self.UpdateSensor_ClassWorker.deleteLater) # Xoá đối tượng
-        self.thread1.finished.connect(self.thread1.deleteLater) # Xoá luồng
-        print("Exit Start_Chart")
-        self.thread1.started.connect(self.UpdateSensor_ClassWorker.UpdateData(self))
-        self.thread1.start()
-        print("Exit Start_Chart?")
+        # Create a new thread
+        self.thread2 = QThread()
+        # Set worker class (inherited from QObject)
+        self.UpdateSensor_ClassWorker = UpdateSensor_ClassWorker(self)
+        # Move worker class into thread2
+        self.UpdateSensor_ClassWorker.moveToThread(self.thread2)
+        # Connect finished signal to thread2.quit aka exit from thread2
+        self.UpdateSensor_ClassWorker.finished.connect(self.thread2.quit) # Thoát luồng
+        # Connect finished signal to deleteLater method of workerclass to delete worker class
+        self.UpdateSensor_ClassWorker.finished.connect(self.UpdateSensor_ClassWorker.deleteLater)
+        # Connect finished signal to deleteLater method of thread2 to delete thread2
+        self.thread2.finished.connect(self.thread2.deleteLater)
+        # Connect started signal to UpdateData method of worker class to start worker class
+        self.thread2.started.connect(self.UpdateSensor_ClassWorker.UpdateData)
+        # Starting thread2
+        self.thread2.start()
+        # Connect update_chart_1 signal to self.Load_Chart_1 
+        self.UpdateSensor_ClassWorker.update_chart_1.connect(self.Load_Chart_1)
+        # Connect update_chart_1 signal to self.Load_Chart_1 
+        self.UpdateSensor_ClassWorker.update_chart_2.connect(self.Load_Chart_2)
+        # Connect update_chart_1 signal to self.Load_Chart_1 
+        self.UpdateSensor_ClassWorker.update_chart_3.connect(self.Load_Chart_3)
 
     def Load_Chart_1(self):
-        self.Load_Chart_x(self.ui.Chart_1, YValues=self.Chart_Data_1, YLabel='Power Generation', YUnit='VAh')
+        self.Load_Chart_x(self.ui.Chart_1, YValues=self.Chart_Data_1, YLabel='Power Generation', YUnit='VAh', Color='r')
 
     def Load_Chart_2(self):
-        self.Load_Chart_x(self.ui.Chart_2,  YValues=self.Chart_Data_2, YLabel='Solar Panel (Max)' , YUnit=' oC')
+        self.Load_Chart_x(self.ui.Chart_2,  YValues=self.Chart_Data_2, YLabel='Solar Panel (Max)' , YUnit=' °C')
 
     def Load_Chart_3(self):
-        self.Load_Chart_x(self.ui.Chart_3,  YValues=self.Chart_Data_3, YLabel='Inverter (Max)' , YUnit=' oC')
+        self.Load_Chart_x(self.ui.Chart_3,  YValues=self.Chart_Data_3, YLabel='Inverter (Max)' , YUnit=' °C')
 
     def New_Notification(self, str_text):
         YEAR        = datetime.date.today().year     # the current year
@@ -121,6 +130,15 @@ class ControlCenter(QMainWindow):
         Time=f"[ {HOUR}:{MINUTE}:{SECONDS}   {YEAR}-{MONTH}-{DATE} ]\n"
         self.Notification_Buffer = "\n" + Time + str_text + "\n" + Old_Notification
         self.ui.Notification.setPlainText(self.Notification_Buffer)
+
+    def Set_Indicator_Dev_1(self):
+        size=self.ui.IndicatorDev_1.size()
+        if self.Dev1_Ctl == 1:
+            pixmap=QPixmap("./resources/images/shield.png")
+            self.ui.IndicatorDev_1.setPixmap(pixmap.scaled(size))
+        else:
+            pixmap=QPixmap("./resources/images/warning.png")
+            self.ui.IndicatorDev_1.setPixmap(pixmap.scaled(size))
 
     def Set_Indicator_Dev_2(self):
         size=self.ui.IndicatorDev_2.size()
@@ -213,6 +231,14 @@ class ControlCenter(QMainWindow):
     def Clear_Notification(self):
         self.Notification_Buffer = ""
         self.ui.Notification.setPlainText("")
+
+    def Clear_Chart(self):
+        self.Chart_Data_1=np.zeros(self.Chart_Len)
+        self.Chart_Data_2=np.zeros(self.Chart_Len)
+        self.Chart_Data_3=np.zeros(self.Chart_Len)
+        self.Load_Chart_1()
+        self.Load_Chart_2()
+        self.Load_Chart_3()
 
     def Exit(self):
         sys.exit(1)

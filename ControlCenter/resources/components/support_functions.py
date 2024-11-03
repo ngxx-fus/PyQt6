@@ -8,54 +8,37 @@ from PyQt6.QtCore import QObject, pyqtSignal
 
 class UpdateSensor_ClassWorker(QObject):
     finished = pyqtSignal()
- 
-    def __init__(self):
-        super().__init__()
-        # myapp = myapp
+    update_chart_1 = pyqtSignal()
+    update_chart_2 = pyqtSignal()
+    update_chart_3 = pyqtSignal()
 
-    def Load_Chart_x(self, chart, XValues=None, YValues=None, YLabel=None, YUnit=None, Color=None):
-        chart.setBackground('white')
-        layout = pg.GraphicsLayout()
-        chart.setCentralItem(layout)
-        chart.show()
-        plot = layout.addPlot(0, 0)
-        if XValues is not None \
-            and YValues is not None \
-            and Color is not None:
-            plot.plot(XValues, YValues, Color)
-        if XValues is not None \
-            and YValues is not None:
-            plot.plot(XValues, YValues)
-        plot.showGrid(x = True, y = True, alpha = 0.5)
-        plot.setLabel('left', YLabel, YUnit)
-        X_axis = plot.getAxis('bottom')
-        X_axis.setStyle(showValues=False)
+    def __init__(self, myapp):
+        super().__init__(parent=None)
+        self.myapp=myapp
 
-    def Update_Sensor_1(self, myapp):
-        data = np.append(myapp.Chart_Data_1[1:], randint(78, 82)*1000)
-        self.Load_Chart_x(
-            myapp.ui.Chart_1,
-            XValues=myapp.Chart_XAxis_Data,
-            YValues=data,
-            YLabel="Power Generated",
-            YUnit="VAh"
-        )
+    def Update_Sensor_1(self):
+        data = np.append(self.myapp.Chart_Data_1[1:], randint(30, 82)*1000)
+        self.myapp.Chart_Data_1 = data
+        #------------------------------------#
+        self.update_chart_1.emit()
 
-    # def Update_Sensor_2(self):
-    #     data = randint(78, 82)
-    #     myappmyapp.Chart_Data_2 = np.append(myapp.Chart_Data_2[1:], data)
-    #     myapp.Load_Chart_2()
+    def Update_Sensor_2(self):
+        data = randint(68, 82)
+        self.myapp.Chart_Data_2 = np.append(self.myapp.Chart_Data_2[1:], data)
+        #------------------------------------#
+        self.update_chart_2.emit()
 
-    # def Update_Sensor_3(self):
-    #     data = randint(78, 82)*1000
-    #     myapp.Chart_Data_3 = np.append(myapp.Chart_Data_3[1:], data)
-    #     myapp.Load_Chart_3()
+    def Update_Sensor_3(self):
+        data = randint(68, 82)
+        self.myapp.Chart_Data_3 = np.append(self.myapp.Chart_Data_3[1:], data)
+        #------------------------------------#
+        self.update_chart_3.emit()
 
 
-    def UpdateData(self, myapp):
+    def UpdateData(self):
         while True:
-            print("HEHEHE")
-            self.Update_Sensor_1(myapp)
-            # Update_Sensor_2()
-            # Update_Sensor_3()
-            time.sleep(1)
+            self.Update_Sensor_1()
+            self.Update_Sensor_2()
+            self.Update_Sensor_3()
+            time.sleep(2)
+        self.finished.emit()
