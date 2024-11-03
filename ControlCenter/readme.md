@@ -1,6 +1,7 @@
 ## Overview
 Hello from ***ngxxfus***
-This app was made for monitoring Solar Farm as a core monitor for quick activate/deactivate some cores system (Security System, Fire Fighting System, Solar Panel Cooling System). 
+
+This app was made for monitoring Solar Farm as a core monitor for quick activate/deactivate some cores system such as Security System, Fire Fighting System, Solar Panel Cooling System. 
 
 Provide monitoring of:
 
